@@ -151,25 +151,19 @@ let gameState board =
   match s1, s2 with
     | 24, 24 -> "Game ended in a draw"
     | x, y ->
+      printfn "s1 is %d" s1
       match p with
         | North -> 
-          match s1 >= 25 with
+          match s2 >= 25 with
             | true -> "South won"
             | false -> "North's turn"
         | South -> 
-          match s2 >= 25 with
+          match s1 >= 25 with
             | true -> "North won"
             | false -> "South's turn"
 
 let printBoard b =
-  printfn " 
-        %02d  %02d
-   %02d            %02d
-%02d                  %02d
-%02d                  %02d
-   %02d            %02d
-        %02d  %02d"
-    (getSeeds 10 b) (getSeeds 9 b) (getSeeds 11 b) (getSeeds 8 b) (getSeeds 12 b) (getSeeds 7 b) (getSeeds 1 b) (getSeeds 6 b) (getSeeds 2 b) (getSeeds 5 b) (getSeeds 3 b) (getSeeds 4 b) 
+  printfn "(%d, %d, %d, %d, %d, %d,\n %d, %d, %d, %d, %d, %d)\n" (getSeeds 12 b) (getSeeds 11 b) (getSeeds 10 b) (getSeeds 9 b) (getSeeds 8 b) (getSeeds 7 b) (getSeeds 1 b) (getSeeds 2 b) (getSeeds 3 b) (getSeeds 4 b) (getSeeds 5 b) (getSeeds 6 b) 
 
 let playGame numbers =
      let rec play xs game =
@@ -183,23 +177,13 @@ let playGame numbers =
             play xs (useHouse x game)
      play numbers (start South)
 
-let pg =
-  let rec p b=
-    match String.length (gameState b) with
-      | 12 ->
-        gameState b |> printfn "%s" 
-        printBoard b
-        printf "Please enter which house you would like to play (to quit type: 999): "
-        let i = System.Console.ReadLine()
-        match int i with
-          | 999 -> ()
-          | n -> p (useHouse n b) 
-      | _ -> 
-        gameState b |> printfn "%s"
-        ()
-  p (start South)
-
 [<EntryPoint>]
 let main _ =
-    pg
+    let b = playGame [6; 8; 5; 9; 4; 12; 3; 10; 1; 11; 2; 12; 5; 7; 5; 11; 6; 8; 1; 12; 4; 10; 5; 9;
+ 2; 11; 3; 12; 6; 9; 5; 10; 2; 11; 1; 12; 4; 7; 6; 7; 3; 8; 5; 9; 6; 10; 1; 11;
+ 2; 12; 3; 8; 4; 9; 1; 10; 2; 11; 5; 12; 6; 8; 3; 9; 4; 10; 5; 11; 1; 12; 6]
+
+    //) ||> printfn "%d %d"
+    printBoard b
+    gameState b |> printfn "%s"
     0 // return an integer exit code
